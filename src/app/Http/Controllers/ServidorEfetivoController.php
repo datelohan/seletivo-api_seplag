@@ -58,7 +58,7 @@ class ServidorEfetivoController extends Controller
     {
         $servidores = DB::table('lotacaos as a')
             ->join('servidor_efetivos as b', 'b.pes_id', '=', 'a.pes_id')
-            ->join('unidades as c', 'a.unid_id', '=', 'c.uni_id')
+            ->join('unidades as c', 'a.uni_id', '=', 'c.uni_id')
             ->join('pessoas as d', 'd.pes_id', '=', 'a.pes_id')
             ->where('c.uni_id', $unid_id)
             ->select(
@@ -87,7 +87,7 @@ class ServidorEfetivoController extends Controller
         $enderecos = DB::table('servidor_efetivos as se')
             ->join('pessoas as p', 'se.pes_id', '=', 'p.pes_id')
             ->join('lotacaos as l', 'se.pes_id', '=', 'l.pes_id')
-            ->join('unidades as u', 'l.unid_id', '=', 'u.uni_id')
+            ->join('unidades as u', 'l.uni_id', '=', 'u.uni_id')
             ->join('unidade_endereco as ue', 'u.uni_id', '=', 'ue.unid_id')
             ->join('enderecos as e', 'ue.end_id', '=', 'e.end_id')
             ->where('p.pes_nome', 'like', '%' . $nome . '%') // Filtra pelo nome do servidor

@@ -14,7 +14,7 @@ class Lotacao extends Model
 
     protected $fillable = [
         'pes_id',
-        'unid_id',
+        'uni_id',
         'lot_data_lotacao',
         'lot_data_remocao',
         'lot_portaria',
@@ -24,6 +24,6 @@ class Lotacao extends Model
 
     public function unidade()
     {
-        return $this->belongsTo(Unidade::class, 'unid_id', 'uni_id'); // Relacionamento com a tabela 'unidades'
+        return $this->belongsTo(Unidade::class, 'uni_id', 'uni_id'); // Relacionamento com a tabela 'unidades'
     }
 }

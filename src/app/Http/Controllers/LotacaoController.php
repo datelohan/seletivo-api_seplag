@@ -24,7 +24,7 @@ class LotacaoController extends Controller
     {
         $validated = $request->validate([
             'pes_id' => 'required|exists:pessoas,pes_id', 
-            'unid_id' => 'required|exists:unidades,uni_id',
+            'uni_id' => 'required|exists:unidades,uni_id',
             'lot_data_lotacao' => 'required|date',
             'lot_data_remocao' => 'required|date|after_or_equal:lot_data_lotacao',
             'lot_portaria' => 'required|string|max:255',

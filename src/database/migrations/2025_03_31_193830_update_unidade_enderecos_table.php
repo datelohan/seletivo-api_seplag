@@ -9,16 +9,11 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('unidade_endereco', function (Blueprint $table) {
-            // Remove a chave primária existente, se houver
-          
-
-            // Adiciona a coluna 'id' como chave primária auto-incrementada
-            
-
-            // Adiciona a coluna 'unid_id' como chave estrangeira para a tabela 'unidades'
+        Schema::create('unidade_endereco', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->timestamps();
             $table->unsignedBigInteger('unid_id')->nullable()->after('id');
             $table->foreign('unid_id')->references('uni_id')->on('unidades')->onDelete('cascade');
 
@@ -31,17 +26,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down()
+    public function down(): void
     {
-        Schema::table('unidade_endereco', function (Blueprint $table) {
-            // Remove as chaves estrangeiras e as colunas
-            $table->dropForeign(['unid_id']);
-            $table->dropColumn('unid_id');
-
-            $table->dropForeign(['end_id']);
-            $table->dropColumn('end_id');
-
-            $table->dropColumn('id');
-        });
+        //
     }
 };

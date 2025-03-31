@@ -23,8 +23,9 @@ services:
       - DB_DATABASE=${DB_DATABASE}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
+      - MINIO_HOST=http://seplag-minio:9000
     command: php-fpm
-
+ 
   db:
     image: postgres:latest
     container_name: seplag-db
@@ -55,6 +56,29 @@ services:
     command: server /data --console-address ":9001"
     networks:
       - seplag-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+  
+  # Serviço para criar o bucket seplag1 automaticamente
+  minio-setup:
+    image: minio/mc
+    container_name: seplag-minio-setup
+    depends_on:
+      - minio
+    networks:
+      - seplag-network
+    entrypoint: >
+      /bin/sh -c "
+      sleep 10 &&
+      /usr/bin/mc config host add myminio http://seplag-minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} &&
+      /usr/bin/mc mb myminio/seplag1 --ignore-existing &&
+      echo 'Bucket criado com sucesso!' &&
+      echo 'IP do MinIO:' &&
+      getent hosts seplag-minio | awk '{ print $$1 }'
+      "
 
   nginx:
     image: nginx:alpine
@@ -78,4 +102,4 @@ networks:
 volumes:
   postgres-data:
   minio-data:
-  nginx-logs: # Certifique-se de que o volume de logs está configurado
+  nginx-logs:

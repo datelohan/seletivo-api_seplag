@@ -24,9 +24,9 @@ class UnidadeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-        'cid_nome' => 'required|string|max:255',
-        'cid_uf' => 'required|string|max:2',
-        ]); // Corrigido para usar 'cid_nome' e
+        'uni_sigla' => 'required|string|max:255',
+        'uni_nome' => 'required|string|max:255',
+        ]); 
         
 
         return Unidade::create($validated);
