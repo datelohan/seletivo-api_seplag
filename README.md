@@ -5,6 +5,8 @@ API REST desenvolvida com Laravel 11 para gerenciamento de servidores efetivos.
 ## NOTA IMPORTANTE !
 lembre-se de colocar no cabeçalho a resposta esperada application/json
 no Insominia basta colocar no cabeçalho Accept > application/json
+![image](https://github.com/user-attachments/assets/1efde532-7cca-45c9-90ed-3a1cca5f563f)
+
 
 ## Requisitos
 
