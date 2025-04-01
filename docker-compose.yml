@@ -20,9 +20,9 @@ services:
       - db
       - minio
     environment:
-      - DB_DATABASE=${DB_DATABASE}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=laravel
+      - DB_USERNAME=seplag
+      - DB_PASSWORD=seplag123
       - MINIO_HOST=http://seplag-minio:9000
     command: php-fpm
  
@@ -31,9 +31,9 @@ services:
     container_name: seplag-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: laravel # Nome do banco de dados a ser criado
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: laravel 
+      POSTGRES_USER: seplag
+      POSTGRES_PASSWORD: seplag123
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
@@ -46,8 +46,8 @@ services:
     container_name: seplag-minio
     restart: unless-stopped
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_ROOT_USER: seplagminio
+      MINIO_ROOT_PASSWORD: seplagminio
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -72,12 +72,11 @@ services:
       - seplag-network
     entrypoint: >
       /bin/sh -c "
-      sleep 10 &&
-      /usr/bin/mc config host add myminio http://seplag-minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} &&
-      /usr/bin/mc mb myminio/seplag1 --ignore-existing &&
-      echo 'Bucket criado com sucesso!' &&
-      echo 'IP do MinIO:' &&
-      getent hosts seplag-minio | awk '{ print $$1 }'
+      until (/usr/bin/mc alias set seplag-minio http://seplag-minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}); do
+        echo 'Aguardando o MinIO iniciar...';
+        sleep 5;
+      done;
+      /usr/bin/mc mb seplag-minio/seplag1;
       "
 
   nginx:
@@ -89,7 +88,8 @@ services:
     volumes:
       - ./src:/var/www
       - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/logs:/var/log/nginx # Adicione logs para depuração
+      - ./nginx/logs:/var/log/nginx
+      - nginx-logs:/var/log/nginx # Corrige o uso do volume nginx-logs
     networks:
       - seplag-network
     depends_on:
