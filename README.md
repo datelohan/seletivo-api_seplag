@@ -40,10 +40,7 @@ docker-compose exec app composer install
 docker-compose exec app php artisan key:generate
 ```
 
-6. Gere a chave JWT:
-```bash
-docker-compose exec app php artisan jwt:secret
-```
+
 
 7. Execute as migrações:
 ```bash
